@@ -1,0 +1,3 @@
+class LogInUseCase {
+  //Code
+}
