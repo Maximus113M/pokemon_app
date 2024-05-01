@@ -1,5 +1,5 @@
 import 'package:pokemon_app/features/game/data/models/pokemon_model.dart';
-import 'package:pokemon_app/features/game/domain/respositories/Game_repository.dart';
+import 'package:pokemon_app/features/game/domain/respositories/game_repository.dart';
 
 class GetPokemonsUseCase {
   final GameRepository gameRepository;
