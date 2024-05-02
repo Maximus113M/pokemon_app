@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pokemon_app/core/util/dependency_injection.dart';
+import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
+import 'package:pokemon_app/features/sign_in/display/screens/sign_in_screen.dart';
+import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -7,7 +12,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MainApp());
+  DependencyInjection.configure();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => SignInProvider(logInUseCase: DependencyInjection.getIt.get<LogInUseCase>()))
+    ],
+    child: const MainApp()
+  ));
 }
 
 class MainApp extends StatelessWidget {
@@ -15,12 +26,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      home: SignInScreen()
     );
   }
 }
