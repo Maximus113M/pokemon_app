@@ -3,8 +3,6 @@ import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.
 import 'package:provider/provider.dart';
 
 class SignInScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   SignInScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
@@ -35,15 +33,7 @@ class SignInScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  if (!value.contains("@")) {
-                    return 'Please enter a valid email address';
-                  }
-                  return null;
-                },
+                controller: context.watch<SignInProvider>().emailController,
                 decoration: InputDecoration(
                   hintText: 'Email',
                   filled: true,
@@ -55,19 +45,11 @@ class SignInScreen extends StatelessWidget {
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 ),
-                controller: emailController,
               ),
               const SizedBox(height: 20),
+              //
               TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
+                controller: context.watch<SignInProvider>().passwordController,
                 decoration: InputDecoration(
                   hintText: 'Password',
                   filled: true,
@@ -80,21 +62,13 @@ class SignInScreen extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 ),
                 obscureText: true,
-                controller: passwordController,
               ),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final dataResult = await context
-                          .read<SignInProvider>()
-                          .signIn(emailController.text.trim(),
-                              passwordController.text.trim());
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(dataResult.message)));
-                    }
+                    await context.read<SignInProvider>().validateLogIn(context);
                   },
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -115,8 +89,13 @@ class SignInScreen extends StatelessWidget {
                       "¿No existe aún esa cuenta? Registrala",
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                    SizedBox(width: 5,),
-                    Icon(Icons.arrow_downward, color: Colors.white,)
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(
+                      Icons.arrow_downward,
+                      color: Colors.white,
+                    )
                   ],
                 ),
               ),
@@ -124,14 +103,14 @@ class SignInScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
+                    /*  if (_formKey.currentState!.validate()) {
                       final dataResult = await context
                           .read<SignInProvider>()
                           .signUp(emailController.text.trim(),
                               passwordController.text.trim());
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(dataResult.message)));
-                    }
+                    }*/
                   },
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pokemon_app/core/router/app_router.dart';
 import 'package:pokemon_app/core/util/dependency_injection.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:pokemon_app/features/sign_in/display/screens/sign_in_screen.dart';
@@ -27,8 +28,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SignInScreen(),
+    return MaterialApp.router(
+      routerConfig: appRouter,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
