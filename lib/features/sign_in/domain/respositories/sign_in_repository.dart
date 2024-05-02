@@ -5,4 +5,6 @@ abstract class SignInRepository {
 
   Future<DataResult<UserCredential>> signIn(String email, String password);
 
+
+  Future<DataResult<UserCredential>> signUp(String email, String password);
 }

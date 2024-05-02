@@ -15,4 +15,9 @@ class SignInRepositoryImpl extends SignInRepository {
   Future<DataResult<UserCredential>> signIn(String email, String password) {
     return datasource.signIn(email, password);
   }
+  
+  @override
+  Future<DataResult<UserCredential>> signUp(String email, String password) {
+    return datasource.signUp(email, password);
+  }
 }

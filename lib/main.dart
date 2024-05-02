@@ -4,6 +4,7 @@ import 'package:pokemon_app/core/util/dependency_injection.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:pokemon_app/features/sign_in/display/screens/sign_in_screen.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
+import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -13,12 +14,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   DependencyInjection.configure();
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => SignInProvider(logInUseCase: DependencyInjection.getIt.get<LogInUseCase>()))
-    ],
-    child: const MainApp()
-  ));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+        create: (_) => SignInProvider(
+            logInUseCase: DependencyInjection.getIt.get<LogInUseCase>(),
+            signUpUseCase: DependencyInjection.getIt.get<SignUpUseCase>()))
+  ], child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SignInScreen()
+      home: SignInScreen(),
     );
   }
 }
