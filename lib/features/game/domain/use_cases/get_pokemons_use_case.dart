@@ -7,6 +7,6 @@ class GetPokemonsUseCase {
   GetPokemonsUseCase({required this.gameRepository});
 
   Future<List<PokemonModel>?> call(List<int> pokemonsIds) async {
-    return gameRepository.getPokemons(pokemonsIds);
+    return await gameRepository.getPokemons(pokemonsIds);
   }
 }

@@ -1,8 +1,8 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-//import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 
-/*class InAppNotification {
+class InAppNotification {
   InAppNotification._();
 
   static invalidEmailAndPassword({
@@ -95,17 +95,11 @@
         size: 30,
       ),
       padding: const EdgeInsets.all(20),
-      titleText: Text(
-        title,
-        style: TextStyle(color: notificationColor)
-      ),
-      messageText: Text(
-        message,
-        style: const TextStyle(color: Colors.white)
-      ),
+      titleText: Text(title, style: TextStyle(color: notificationColor)),
+      messageText: Text(message, style: const TextStyle(color: Colors.white)),
     ).show(context);
   }
-}*/
+}
 
 enum NotificationType {
   success,

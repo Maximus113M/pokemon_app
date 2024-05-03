@@ -9,15 +9,13 @@ abstract class GameDatasource {
 }
 
 class GameDatasourceImpl extends GameDatasource {
-  //https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonId}.svg
   @override
   Future<List<PokemonModel>?> getPokemons(List<int> pokemonsIds) async {
     try {
       List<PokemonModel> pokemons = [];
 
-      Future.forEach(pokemonsIds, (pokemonId) async {
-        final Uri url =
-            Uri.https('https://pokeapi.co/api/v2/pokemon/$pokemonId');
+      await Future.forEach(pokemonsIds, (pokemonId) async {
+        final Uri url = Uri.https('pokeapi.co', '/api/v2/pokemon/$pokemonId');
         final response = await http.get(url);
         pokemons.add(
           PokemonModel.fromJson(jsonDecode(response.body)),

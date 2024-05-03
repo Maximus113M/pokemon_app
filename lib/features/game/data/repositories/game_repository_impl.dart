@@ -10,7 +10,7 @@ class GameRepositoryImpl extends GameRepository {
   @override
   Future<List<PokemonModel>?> getPokemons(List<int> pokemonsIds) async {
     try {
-      return await getPokemons(pokemonsIds);
+      return await gameDatasource.getPokemons(pokemonsIds);
     } catch (e) {
       return null;
     }

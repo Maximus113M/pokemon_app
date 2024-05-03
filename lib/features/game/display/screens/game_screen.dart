@@ -1,9 +1,12 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+
 import 'package:pokemon_app/core/util/app_assests.dart';
 import 'package:pokemon_app/core/util/screen_size.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
 import 'package:pokemon_app/features/game/display/screens/widgets/pokemon_options.dart';
+
 import 'package:provider/provider.dart';
 
 class GameScreen extends StatelessWidget {
@@ -29,22 +32,17 @@ class GameScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              AppAssets.pokemonLogo,
-              height: 50,
-            ),
-            /*Image.asset(
+        title: Image.asset(
+          AppAssets.pokemonLogo,
+          height: 50,
+        ),
+        /*Image.asset(
               AppAssets.pokeBall,
               height: 40,
             ),*/
-          ],
-        ),
       ),
       body: GameScreenBody(
-        gameProvider: context.read(),
+        gameProvider: context.watch(),
       ),
     );
   }
@@ -56,32 +54,54 @@ class GameScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: ScreenSize.width,
-      height: ScreenSize.height,
-      decoration: BoxDecoration(),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              'Quien es ese Pokemon?\n1/10',
-              style: TextStyle(
-                fontSize: ScreenSize.width * 0.05,
-                fontWeight: FontWeight.bold,
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: ScreenSize.width,
+          height: ScreenSize.height,
+          decoration: BoxDecoration(),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  'Quien es ese Pokemon?\n1/10',
+                  style: TextStyle(
+                    fontSize: ScreenSize.width * 0.05,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              textAlign: TextAlign.center,
+              pokemonImage(gameProvider),
+              SizedBox(
+                height: ScreenSize.absoluteHeight * 0.1,
+              ),
+              PokemonOptions(
+                gameProvider: gameProvider,
+              ),
+            ],
+          ),
+        ),
+        if (gameProvider.isLoading)
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+            child: Transform.scale(
+              scale: 0.8,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppAssets.loadingLottie,
+                  Text(
+                    'Cargando...',
+                    style: TextStyle(fontSize: ScreenSize.width * 0.055),
+                  ),
+                ],
+              ),
             ),
-          ),
-          pokemonImage(gameProvider),
-          SizedBox(
-            height: ScreenSize.absoluteHeight * 0.1,
-          ),
-          PokemonOptions(
-            gameProvider: gameProvider,
-          ),
-        ],
-      ),
+          )
+      ],
     );
   }
 }
@@ -102,8 +122,8 @@ SizedBox pokemonImage(GameProvider gameProvider) {
               gameProvider.isShowingPokemon ? BlendMode.dst : BlendMode.srcIn),
           child: Image(
             height: ScreenSize.absoluteHeight * 0.25,
-            image: const Svg(
-              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${180}.svg',
+            image: Svg(
+              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${gameProvider.imageId}.svg',
               source: SvgSource.network,
             ),
           ),

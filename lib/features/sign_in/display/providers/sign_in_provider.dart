@@ -4,14 +4,17 @@ import 'package:go_router/go_router.dart';
 import 'package:pokemon_app/core/data_wrappers/data_result.dart';
 import 'package:pokemon_app/core/util/app_functions.dart';
 import 'package:pokemon_app/core/util/in_app_notification.dart';
+import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
+import 'package:provider/provider.dart';
 
 class SignInProvider with ChangeNotifier {
   final LogInUseCase logInUseCase;
   final SignUpUseCase signUpUseCase;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   SignInProvider({required this.logInUseCase, required this.signUpUseCase});
 
@@ -28,7 +31,7 @@ class SignInProvider with ChangeNotifier {
   bool validateEmail() {
     if (emailController.text.trim().isEmpty ||
         !AppFunctions.emailRegExp.hasMatch(emailController.text.trim())) {
-          print("object");
+      print("object");
       //NOTIFICAR
       return false;
     }
@@ -45,23 +48,29 @@ class SignInProvider with ChangeNotifier {
   }
 
   Future<void> validateLogIn(BuildContext context) async {
-    if (!validateEmail() || !validatePassword()) {
+    if (isLoading) return;
+    isLoading = true;
+    /*if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
     }
-    final result = await signIn(emailController.text, passwordController.text);
-    if (!result.success) {
-      //notificar
-      InAppNotification.serverFailure(context: context, message: result.message);
-      return;
-    }
+    await signIn(emailController.text, passwordController.text).then((result) {
+      if (!result.success) {
+        //notificar
+        InAppNotification.serverFailure(
+            context: context, message: result.message);
+        return;
+      }*/
     //Navegar a la siguiente ruta
+    context.read<GameProvider>().initGame();
     InAppNotification.successfulSignUp(context: context);
     context.pushReplacement('/game');
+    //});
+    isLoading = false;
+    notifyListeners();
   }
 
-
-   Future<void> validateSignUp(BuildContext context) async {
+  Future<void> validateSignUp(BuildContext context) async {
     if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
@@ -69,7 +78,8 @@ class SignInProvider with ChangeNotifier {
     final result = await signUp(emailController.text, passwordController.text);
     if (!result.success) {
       //notificar
-      InAppNotification.serverFailure(context: context, message: result.message);
+      InAppNotification.serverFailure(
+          context: context, message: result.message);
       return;
     }
     //Navegar a la siguiente ruta

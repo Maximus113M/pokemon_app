@@ -33,15 +33,15 @@ class DependencyInjection {
 
   static void configureGame() {
     // Data source class
-    getIt.registerSingleton<GameDatasource>(GameDatasourceImpl());
+    getIt.registerSingleton<GameDatasourceImpl>(GameDatasourceImpl());
     // Repository Implementation class
     getIt.registerSingleton<GameRepositoryImpl>(
-        GameRepositoryImpl(gameDatasource: getIt.get<GameDatasource>()));
+        GameRepositoryImpl(gameDatasource: getIt.get<GameDatasourceImpl>()));
     // Use case Log in
     getIt.registerSingleton<GetPokemonsUseCase>(
         GetPokemonsUseCase(gameRepository: getIt.get<GameRepositoryImpl>()));
     // Provider
-    getIt.registerSingleton<GameProvider>(
-        GameProvider(getPokemonsUseCase: getIt.get<GetPokemonsUseCase>()));
+    // getIt.registerSingleton<GameProvider>(
+    //     GameProvider(getPokemonsUseCase: getIt.get<GetPokemonsUseCase>()));
   }
 }
