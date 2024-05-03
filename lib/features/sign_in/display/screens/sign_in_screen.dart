@@ -103,14 +103,7 @@ class SignInScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    /*  if (_formKey.currentState!.validate()) {
-                      final dataResult = await context
-                          .read<SignInProvider>()
-                          .signUp(emailController.text.trim(),
-                              passwordController.text.trim());
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(dataResult.message)));
-                    }*/
+                    await context.read<SignInProvider>().validateSignUp(context);
                   },
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),

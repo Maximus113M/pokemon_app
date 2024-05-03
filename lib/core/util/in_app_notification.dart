@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:market_check/config/utils/utils.dart';
 
 import 'package:another_flushbar/flushbar.dart';
 
@@ -36,7 +35,7 @@ class InAppNotification {
     showAppNotification(
         context: context,
         title: 'Successful registration!',
-        message: 'Se envió una verificación a su correo, por favor verifiquela',
+        message: 'Se ha guardado correctamente tu usuario',
         type: NotificationType.success,
         isDismissible: false);
   }
@@ -62,20 +61,20 @@ class InAppNotification {
 
     switch (type) {
       case NotificationType.error:
-        notificationColor = AppColors.errorText;
+        notificationColor = Colors.red[900]!;
         notificationIcon = Icons.error_outline;
         break;
       case NotificationType.success:
-        notificationColor = AppColors.success;
+        notificationColor = Colors.green[800]!;
         notificationIcon = Icons.verified_outlined;
 
         break;
       case NotificationType.warning:
-        notificationColor = AppColors.warning;
+        notificationColor = Colors.amberAccent[700]!;
         notificationIcon = Icons.warning_outlined;
         break;
       default:
-        notificationColor = AppColors.appSecondary;
+        notificationColor = Colors.blue[500]!;
         Icons.shield_outlined;
     }
     Flushbar(
@@ -87,7 +86,7 @@ class InAppNotification {
       borderRadius: const BorderRadius.all(
         Radius.circular(10),
       ),
-      boxShadows: AppShadows.mainShadow,
+      //boxShadows: AppShadows.mainShadow,
       backgroundColor: Colors.black87,
       isDismissible: isDismissible,
       duration: const Duration(seconds: 5),
@@ -99,13 +98,11 @@ class InAppNotification {
       padding: const EdgeInsets.all(20),
       titleText: Text(
         title,
-        style: FontStyles.subtitle1(
-          notificationColor,
-        ),
+        style: TextStyle(color: notificationColor)
       ),
       messageText: Text(
         message,
-        style: FontStyles.body1(AppColors.white),
+        style: const TextStyle(color: Colors.white)
       ),
     ).show(context);
   }

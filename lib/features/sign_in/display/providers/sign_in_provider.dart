@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pokemon_app/core/data_wrappers/data_result.dart';
 import 'package:pokemon_app/core/util/app_functions.dart';
+import 'package:pokemon_app/core/util/in_app_notification.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
 
@@ -26,7 +27,8 @@ class SignInProvider with ChangeNotifier {
 
   bool validateEmail() {
     if (emailController.text.trim().isEmpty ||
-        !AppFunctions.emailRegExp.hasMatch(emailController.text)) {
+        !AppFunctions.emailRegExp.hasMatch(emailController.text.trim())) {
+          print("object");
       //NOTIFICAR
       return false;
     }
@@ -43,10 +45,32 @@ class SignInProvider with ChangeNotifier {
   }
 
   Future<void> validateLogIn(BuildContext context) async {
-    if (!validateEmail() || !validatePassword()) return;
+    if (!validateEmail() || !validatePassword()) {
+      InAppNotification.invalidEmailAndPassword(context: context);
+      return;
+    }
     final result = await signIn(emailController.text, passwordController.text);
-    if (result.data == null) {
+    if (!result.success) {
       //notificar
+      InAppNotification.serverFailure(context: context, message: result.message);
+      return;
+    }
+    //Navegar a la siguiente ruta
+    InAppNotification.successfulSignUp(context: context);
+    context.pushReplacement('/game');
+  }
+
+
+   Future<void> validateSignUp(BuildContext context) async {
+    if (!validateEmail() || !validatePassword()) {
+      InAppNotification.invalidEmailAndPassword(context: context);
+      return;
+    }
+    final result = await signUp(emailController.text, passwordController.text);
+    if (!result.success) {
+      //notificar
+      InAppNotification.serverFailure(context: context, message: result.message);
+      return;
     }
     //Navegar a la siguiente ruta
     context.pushReplacement('/game');
