@@ -33,6 +33,7 @@ class SignInDatasourceImpl extends SignInDatasource {
             message: "Wrong password provided for that user.",
             data: null);
       }
+      print(e);
       return DataResult(success: false, message: e.message!, data: null);
     }
   }
@@ -41,12 +42,12 @@ class SignInDatasourceImpl extends SignInDatasource {
   Future<DataResult<UserCredential>> signUp(
       String email, String password) async {
     try {
+
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-
       return DataResult(
           success: true,
           message: "Cuenta creada correctamente. Ingresaste a la cuenta correctamente",
