@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_app/core/router/app_router.dart';
 import 'package:pokemon_app/core/util/dependency_injection.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
+import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
-import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';

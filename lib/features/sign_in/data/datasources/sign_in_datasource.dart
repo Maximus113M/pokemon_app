@@ -55,13 +55,13 @@ class SignInDatasourceImpl extends SignInDatasource {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
         return DataResult(
-            success: true,
+            success: false,
             message: "The password provided is too weak.",
             data: null);
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
         return DataResult(
-            success: true,
+            success: false,
             message: "The account already exists for that email.",
             data: null);
       }
