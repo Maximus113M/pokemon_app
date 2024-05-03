@@ -42,3 +42,36 @@ Para esta ocasión vamos a instalar Flutter dentro de Windows. Pero puedes segui
    - También puedes ejecutar el comando `flutter pub global activate dart_style` para asegurarte de tener la última versión de Dart Style, que es útil para formatear el código Dart.
 
 ¡Listo! Has completado la instalación de Flutter en tu sistema Windows. Ahora estás listo para comenzar a desarrollar aplicaciones móviles con Flutter.
+
+## 2. Configuración de Firebase con Flutter
+
+Antes de configurar Firebase, te explico brevemente que es. Firebase es una plataforma de desarrollo de aplicaciones móviles y web creada por Google que proporciona una variedad de herramientas y servicios para ayudarte a construir aplicaciones móviles de alta calidad, escalables y con características avanzadas sin tener que preocuparte por la infraestructura subyacente. Es ideal tanto para desarrolladores principiantes como para expertos que desean crear aplicaciones potentes de forma rápida y sencilla. Entre sus servicios se destacan, autenticación de usuarios, base de datos en tiempo real, almacenamiento en la nube, notificaciones push, análisis de datos, funciones en la nube y capacidades de aprendizaje automático.
+Pero en este ejemplo solo usaremos la autenticación de usuarios.
+
+### Pasos
+
+1. **Creación de proyecto en Firebase:**
+   -  Vas a **[Firebase](https://firebase.google.com)** e ingresas con tu cuenta de Google.
+   -  Le das a **comenzar** y completa las indicaciones para crear tu primer proyeco en **Firebase**. Es súper sencillo.
+2. **Instalación de Firebase CLI:**
+   - Para usar algunas dependencias que nos ayudan a conectar Flutter con Firebase necesitamos su CLI.
+   - Se puede descargar con **[npm](https://nodejs.org/en)** con el siguiente comando, o a través de un binario (mas información [aquí](https://firebase.google.com/docs/cli?hl=es)):
+     
+     ```shell
+     npm install -g firebase-tools
+     ```
+   - Puede verificar la instalación iniciando sesión en Firebase con su cuenta de Google ejecutando el siguiente comando:
+      
+     ```shell
+     firebase login
+     ```
+   - Pruebe que la CLI esté instalada correctamente enumerando sus proyectos de Firebase. Ejecute el siguiente comando:
+
+     ```shell
+     firebase projects:list
+     ```
+   - Si todo esta correcto, puedes pasar al siguiente paso.
+
+
+
+
