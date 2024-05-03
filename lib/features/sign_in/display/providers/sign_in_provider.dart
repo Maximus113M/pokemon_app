@@ -1,13 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pokemon_app/core/data_wrappers/data_result.dart';
+import 'package:pokemon_app/core/router/app_router.dart';
 import 'package:pokemon_app/core/util/app_functions.dart';
 import 'package:pokemon_app/core/util/in_app_notification.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
+
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInProvider with ChangeNotifier {
   final LogInUseCase logInUseCase;
@@ -64,10 +65,8 @@ class SignInProvider with ChangeNotifier {
     //Navegar a la siguiente ruta
     context.read<GameProvider>().initGame();
     InAppNotification.successfulSignUp(context: context);
-    context.pushReplacement('/game');
-    //});
-    isLoading = false;
-    notifyListeners();
+    //context.pushReplacement('/game');
+    appRouter.go("/game");
   }
 
   Future<void> validateSignUp(BuildContext context) async {
@@ -75,7 +74,8 @@ class SignInProvider with ChangeNotifier {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
     }
-    final result = await signUp(emailController.text, passwordController.text);
+    final result = await signUp(
+        emailController.text.trim(), passwordController.text.trim());
     if (!result.success) {
       //notificar
       InAppNotification.serverFailure(
@@ -83,6 +83,20 @@ class SignInProvider with ChangeNotifier {
       return;
     }
     //Navegar a la siguiente ruta
-    context.pushReplacement('/game');
+    appRouter.go("/game");
+    //context.pushReplacement('/game');
+  }
+
+  void checkAuthenticated() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      Future.microtask(() {
+        appRouter.go("/game");
+      });
+    }
+  }
+
+  void logout(BuildContext context) {
+    FirebaseAuth.instance.signOut();
+    appRouter.go("/");
   }
 }

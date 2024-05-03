@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/core/router/app_router.dart';
 import 'package:pokemon_app/core/util/screen_size.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:provider/provider.dart';
@@ -9,16 +10,18 @@ class SignInScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    context.read<SignInProvider>().checkAuthenticated();
+    
     ScreenSize.init(context);
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade300, Colors.blue.shade600],
-          ),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              //colors: [Colors.blue.shade300, Colors.blue.shade600],
+              colors: [Colors.red.shade500, Colors.red.shade700]),
         ),
         child: Form(
           key: _formKey,
@@ -75,11 +78,15 @@ class SignInScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Colors.blue.shade300),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 143, 21, 21)),
                   child: const Text(
                     'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
@@ -105,16 +112,21 @@ class SignInScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await context.read<SignInProvider>().validateSignUp(context);
+                    await context
+                        .read<SignInProvider>()
+                        .validateSignUp(context);
                   },
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Colors.blue.shade300),
+                      backgroundColor: const Color.fromARGB(255, 143, 21, 21)),
                   child: const Text(
                     'Register',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
                   ),
                 ),
               ),

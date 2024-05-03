@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:pokemon_app/features/game/data/datasources/game_datasource.dart';
 import 'package:pokemon_app/features/game/data/repositories/game_repository_impl.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
-import 'package:pokemon_app/features/game/domain/respositories/game_repository.dart';
 import 'package:pokemon_app/features/game/domain/use_cases/get_pokemons_use_case.dart';
 import 'package:pokemon_app/features/sign_in/data/datasources/sign_in_datasource.dart';
 import 'package:pokemon_app/features/sign_in/data/repositories/sign_in_repository_impl.dart';

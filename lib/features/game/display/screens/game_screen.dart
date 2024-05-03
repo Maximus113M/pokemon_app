@@ -7,6 +7,7 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
 import 'package:pokemon_app/features/game/display/screens/widgets/pokemon_options.dart';
 
+import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:provider/provider.dart';
 
 class GameScreen extends StatelessWidget {
@@ -18,7 +19,9 @@ class GameScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<SignInProvider>().logout(context);
+              },
               icon: const Icon(
                 Icons.logout,
                 color: Colors.white,
