@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/core/util/screen_size.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ class SignInScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    ScreenSize.init(context);
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 40),

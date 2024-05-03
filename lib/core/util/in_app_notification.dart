@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-import 'package:market_check/config/utils/utils.dart';
+//import 'package:another_flushbar/flushbar.dart';
 
-import 'package:another_flushbar/flushbar.dart';
-
-class InAppNotification {
+/*class InAppNotification {
   InAppNotification._();
 
   static invalidEmailAndPassword({
@@ -109,7 +107,7 @@ class InAppNotification {
       ),
     ).show(context);
   }
-}
+}*/
 
 enum NotificationType {
   success,
