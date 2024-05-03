@@ -51,8 +51,8 @@ Pero en este ejemplo solo usaremos la autenticación de usuarios.
 ### Pasos
 
 1. **Creación de proyecto en Firebase:**
-   -  Vas a **[Firebase](https://firebase.google.com)** e ingresas con tu cuenta de Google.
-   -  Le das a **comenzar** y completa las indicaciones para crear tu primer proyeco en **Firebase**. Es súper sencillo.
+   - Vas a **[Firebase](https://firebase.google.com)** e ingresas con tu cuenta de Google.
+   - Le das a **comenzar** y completa las indicaciones para crear tu primer proyeco en **Firebase**. Es súper sencillo.
 2. **Instalación de Firebase CLI:**
    - Para usar algunas dependencias que nos ayudan a conectar Flutter con Firebase necesitamos su CLI.
    - Se puede descargar con **[npm](https://nodejs.org/en)** con el siguiente comando, o a través de un binario (mas información [aquí](https://firebase.google.com/docs/cli?hl=es)):
@@ -71,6 +71,48 @@ Pero en este ejemplo solo usaremos la autenticación de usuarios.
      firebase projects:list
      ```
    - Si todo esta correcto, puedes pasar al siguiente paso.
+3. **Inicialización de FlutterFire**
+   - FlutterFire es un conjunto de plugins de Flutter que permiten a las aplicaciones de Flutter utilizar los servicios de Firebase.
+   - Como primer paso debes instalar el plugin firebase_core, que es responsable de conectar tu aplicación a Firebase. Instala el plugin ejecutando el siguiente comando desde la **raíz del proyecto:**
+
+     ```shell
+     flutter pub add firebase_core
+     ```
+   - Instalar FlutterFire CLI:
+     
+     ```shell
+     # Install the CLI if not already done so
+      dart pub global activate flutterfire_cli
+     ```
+   - Luego crear la configuración del proyecto Firebase dentro del proyecto. Esto generará un archivo "firebase_options.dart" que contendrá todas las opciones necesarias para la inicialización.
+     ```shell
+     # Run the `configure` command, select a Firebase project and platforms
+     flutterfire configure
+     ```
+4. **Configuración en el proyecto**
+   - Primero ve a tu archivo main.dart dentro de lib/.
+   - A continuación hay que proporcionar las opciones generadas al método initializeApp. Dado que esta es una operación asíncrona, la función principal puede ser modificada para asegurar que la inicialización se ha completado antes de ejecutar la aplicación. Primero importa el plugin firebase_core y el archivo generado firebase_options.dart:
+
+     ```dart
+     import 'package:firebase_core/firebase_core.dart';
+     import 'firebase_options.dart';
+     ```
+   - A continuación, dentro de la función principal, asegúrate de que WidgetsFlutterBinding está inicializado y luego inicializa Firebase:
+
+      ```dart
+      void main() async {
+        WidgetsFlutterBinding.ensureInitialized();
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        runApp(MyApp());
+      }
+     ```
+   - Listo. Ya puedes usar los servicios de Firebase dentro de tu app en Flutter!
+
+      
+   
+     
 
 
 
