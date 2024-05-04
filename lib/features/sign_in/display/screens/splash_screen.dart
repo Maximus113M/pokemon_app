@@ -21,6 +21,12 @@ class SplashScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppAssets.loadingLottie,
+              const SizedBox(
+                height: 10,
+              ),
+              Image.asset(
+                AppAssets.pokemonLogo,
+              ),
             ],
           ),
         ),
