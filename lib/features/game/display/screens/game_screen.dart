@@ -65,7 +65,7 @@ class GameScreenBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  'Quien es ese Pokémon?\n${gameProvider.roundCounter}/10',
+                  '¿Quién es ese Pokémon?\n${gameProvider.roundCounter}/10',
                   style: TextStyle(
                       fontSize: ScreenSize.width * 0.05,
                       fontWeight: FontWeight.bold,
@@ -107,8 +107,8 @@ class GameScreenBody extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  backgroundColor: const MaterialStatePropertyAll(
-                    Colors.red,
+                  backgroundColor: MaterialStatePropertyAll(
+                    Colors.red.shade600,
                   ),
                   foregroundColor: const MaterialStatePropertyAll(
                     Colors.white,

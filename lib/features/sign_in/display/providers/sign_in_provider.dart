@@ -15,7 +15,8 @@ class SignInProvider with ChangeNotifier {
   final SignUpUseCase signUpUseCase;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
+  bool isLoggingIn = false;
+  bool isCheckingIn = false;
 
   SignInProvider({required this.logInUseCase, required this.signUpUseCase});
 
@@ -48,8 +49,10 @@ class SignInProvider with ChangeNotifier {
   }
 
   Future<void> validateLogIn(BuildContext context) async {
-    if (isLoading) return;
-    isLoading = true;
+    if (isLoggingIn) return;
+    isLoggingIn = true;
+    notifyListeners();
+
     if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
@@ -57,6 +60,8 @@ class SignInProvider with ChangeNotifier {
     await signIn(emailController.text, passwordController.text).then((result) {
       if (!result.success) {
         //notificar
+        isLoggingIn = false;
+        notifyListeners();
         InAppNotification.serverFailure(
             context: context, message: result.message);
         return;
@@ -67,11 +72,15 @@ class SignInProvider with ChangeNotifier {
       InAppNotification.successfulSignUp(context: context);
       //Navegar a la siguiente ruta
       appRouter.go("/game");
-      isLoading = false;
+      isLoggingIn = false;
     });
   }
 
   Future<void> validateSignUp(BuildContext context) async {
+    if (isCheckingIn) return;
+    isCheckingIn = true;
+    notifyListeners();
+
     if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
@@ -79,6 +88,8 @@ class SignInProvider with ChangeNotifier {
     await signUp(emailController.text.trim(), passwordController.text.trim())
         .then((result) {
       if (!result.success) {
+        isCheckingIn = false;
+        notifyListeners();
         //notificar
         InAppNotification.serverFailure(
             context: context, message: result.message);
@@ -89,6 +100,7 @@ class SignInProvider with ChangeNotifier {
       //Navegar a la siguiente ruta
       context.read<GameProvider>().initGame();
       appRouter.go("/game");
+      isCheckingIn = false;
     });
   }
 
