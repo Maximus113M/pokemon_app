@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/core/data_wrappers/data_result.dart';
 import 'package:pokemon_app/core/router/app_router.dart';
 import 'package:pokemon_app/core/util/app_functions.dart';
 import 'package:pokemon_app/core/util/in_app_notification.dart';
+import 'package:pokemon_app/core/data_wrappers/data_result.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
@@ -51,7 +51,7 @@ class SignInProvider with ChangeNotifier {
   Future<void> validateLogIn(BuildContext context) async {
     if (isLoading) return;
     isLoading = true;
-    /*if (!validateEmail() || !validatePassword()) {
+    if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
     }
@@ -61,12 +61,12 @@ class SignInProvider with ChangeNotifier {
         InAppNotification.serverFailure(
             context: context, message: result.message);
         return;
-      }*/
-    //Navegar a la siguiente ruta
-    context.read<GameProvider>().initGame();
-    InAppNotification.successfulSignUp(context: context);
-    //context.pushReplacement('/game');
-    appRouter.go("/game");
+      }
+      //Navegar a la siguiente ruta
+      context.read<GameProvider>().initGame();
+      InAppNotification.successfulSignUp(context: context);
+      appRouter.go("/game");
+    });
   }
 
   Future<void> validateSignUp(BuildContext context) async {
@@ -83,13 +83,14 @@ class SignInProvider with ChangeNotifier {
       return;
     }
     //Navegar a la siguiente ruta
+    context.read<GameProvider>().initGame();
     appRouter.go("/game");
-    //context.pushReplacement('/game');
   }
 
-  void checkAuthenticated() {
+  void checkAuthenticated(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null) {
       Future.microtask(() {
+        context.read<GameProvider>().initGame();
         appRouter.go("/game");
       });
     }

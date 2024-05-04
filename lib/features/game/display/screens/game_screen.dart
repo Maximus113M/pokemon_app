@@ -5,9 +5,9 @@ import 'package:pokemon_app/core/util/app_assests.dart';
 import 'package:pokemon_app/core/util/screen_size.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
+import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:pokemon_app/features/game/display/screens/widgets/pokemon_options.dart';
 
-import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:provider/provider.dart';
 
 class GameScreen extends StatelessWidget {
@@ -60,30 +60,70 @@ class GameScreenBody extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
+        SizedBox(
           width: ScreenSize.width,
           height: ScreenSize.height,
-          decoration: BoxDecoration(),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  'Quien es ese Pokemon?\n1/10',
+                  'Quien es ese Pokémon?\n${gameProvider.roundCounter}/10',
                   style: TextStyle(
-                    fontSize: ScreenSize.width * 0.05,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: ScreenSize.width * 0.05,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.yellow.shade700),
                   textAlign: TextAlign.center,
                 ),
               ),
               pokemonImage(gameProvider),
-              SizedBox(
-                height: ScreenSize.absoluteHeight * 0.1,
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: ScreenSize.absoluteHeight * 0.04,
+                  ),
+                  child: Text(
+                    gameProvider.isShowingPokemon
+                        ? gameProvider.isCorrectAnswer
+                            ? 'Respuesta correcta!'
+                            : 'Upsss... El Pokémon era ${gameProvider.hidenPokemon?.name}'
+                        : '',
+                    style: TextStyle(
+                      fontSize: ScreenSize.width * 0.042,
+                      color: gameProvider.isCorrectAnswer
+                          ? Colors.green
+                          : Colors.red.shade600,
+                    ),
+                  ),
+                ),
               ),
               PokemonOptions(
                 gameProvider: gameProvider,
               ),
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: const MaterialStatePropertyAll(
+                    Colors.red,
+                  ),
+                  foregroundColor: const MaterialStatePropertyAll(
+                    Colors.white,
+                  ),
+                  padding: MaterialStatePropertyAll(
+                    EdgeInsets.symmetric(
+                      horizontal: gameProvider.roundCounter == 10
+                          ? ScreenSize.width * 0.23
+                          : ScreenSize.width * 0.26,
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  gameProvider.loadNextRound();
+                },
+                child: Text(
+                  gameProvider.roundCounter == 10 ? 'Nuevo Juego' : 'Continuar',
+                  style: TextStyle(fontSize: ScreenSize.width * 0.04),
+                ),
+              )
             ],
           ),
         ),
