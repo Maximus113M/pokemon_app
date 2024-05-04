@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/core/util/app_assests.dart';
 import 'package:pokemon_app/core/util/screen_size.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:provider/provider.dart';
 
 class SignInScreen extends StatelessWidget {
-  SignInScreen({super.key});
+  const SignInScreen({super.key});
 
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    context.read<SignInProvider>().checkAuthenticated(context);
-
-    ScreenSize.init(context);
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              //colors: [Colors.blue.shade300, Colors.blue.shade600],
-              colors: [Colors.red.shade500, Colors.red.shade700]),
-        ),
-        child: Form(
-          key: _formKey,
+      body: SingleChildScrollView(
+        child: Container(
+          height: ScreenSize.height,
+          padding: const EdgeInsets.symmetric(horizontal: 40).copyWith(
+            top: ScreenSize.height * 0.05,
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.red.shade400,
+                  Colors.red.shade500,
+                  Colors.red.shade700
+                ]),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                AppAssets.pokeBall,
+                height: 120,
+              ),
               const Text(
-                'Login',
+                'Inicio',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 40,
@@ -39,7 +45,7 @@ class SignInScreen extends StatelessWidget {
               TextFormField(
                 controller: context.watch<SignInProvider>().emailController,
                 decoration: InputDecoration(
-                  hintText: 'Email',
+                  hintText: 'Correo',
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -55,7 +61,7 @@ class SignInScreen extends StatelessWidget {
               TextFormField(
                 controller: context.watch<SignInProvider>().passwordController,
                 decoration: InputDecoration(
-                  hintText: 'Password',
+                  hintText: 'Contraseña',
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -67,7 +73,7 @@ class SignInScreen extends StatelessWidget {
                 ),
                 obscureText: true,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: ScreenSize.absoluteHeight * 0.05),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -81,7 +87,7 @@ class SignInScreen extends StatelessWidget {
                       ),
                       backgroundColor: const Color.fromARGB(255, 143, 21, 21)),
                   child: const Text(
-                    'Login',
+                    'Ingresar',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -121,7 +127,7 @@ class SignInScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10)),
                       backgroundColor: const Color.fromARGB(255, 143, 21, 21)),
                   child: const Text(
-                    'Register',
+                    'Registrar',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,

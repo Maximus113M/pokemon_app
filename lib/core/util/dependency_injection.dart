@@ -1,12 +1,13 @@
-import 'package:get_it/get_it.dart';
-import 'package:pokemon_app/features/game/data/datasources/game_datasource.dart';
-import 'package:pokemon_app/features/game/data/repositories/game_repository_impl.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
+import 'package:pokemon_app/features/game/data/datasources/game_datasource.dart';
+import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
+import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
+import 'package:pokemon_app/features/game/data/repositories/game_repository_impl.dart';
 import 'package:pokemon_app/features/game/domain/use_cases/get_pokemons_use_case.dart';
 import 'package:pokemon_app/features/sign_in/data/datasources/sign_in_datasource.dart';
 import 'package:pokemon_app/features/sign_in/data/repositories/sign_in_repository_impl.dart';
-import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
-import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
+
+import 'package:get_it/get_it.dart';
 
 class DependencyInjection {
   static GetIt getIt = GetIt.instance;
@@ -40,7 +41,7 @@ class DependencyInjection {
     getIt.registerSingleton<GetPokemonsUseCase>(
         GetPokemonsUseCase(gameRepository: getIt.get<GameRepositoryImpl>()));
     // Provider
-    // getIt.registerSingleton<GameProvider>(
-    //     GameProvider(getPokemonsUseCase: getIt.get<GetPokemonsUseCase>()));
+    getIt.registerSingleton<GameProvider>(
+        GameProvider(getPokemonsUseCase: getIt.get<GetPokemonsUseCase>()));
   }
 }

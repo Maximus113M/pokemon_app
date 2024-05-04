@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_app/core/router/app_router.dart';
 import 'package:pokemon_app/core/util/dependency_injection.dart';
 import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
-import 'package:pokemon_app/features/game/domain/use_cases/get_pokemons_use_case.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/log_in_use_case.dart';
 import 'package:pokemon_app/features/sign_in/domain/use_cases/sign_up_use_case.dart';
@@ -27,10 +26,7 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => GameProvider(
-            getPokemonsUseCase:
-                DependencyInjection.getIt.get<GetPokemonsUseCase>(),
-          ),
+          create: (_) => DependencyInjection.getIt.get<GameProvider>(),
         ),
       ],
       child: const MainApp(),
@@ -43,9 +39,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: appRouter,
-      debugShowCheckedModeBanner: false,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: MaterialApp.router(
+        routerConfig: appRouter,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

@@ -20,7 +20,8 @@ class GameScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                context.read<SignInProvider>().logout(context);
+                if (context.read<GameProvider>().isLoading) return;
+                context.read<SignInProvider>().logOut();
               },
               icon: const Icon(
                 Icons.logout,
@@ -39,10 +40,6 @@ class GameScreen extends StatelessWidget {
           AppAssets.pokemonLogo,
           height: 50,
         ),
-        /*Image.asset(
-              AppAssets.pokeBall,
-              height: 40,
-            ),*/
       ),
       body: GameScreenBody(
         gameProvider: context.watch(),
@@ -91,7 +88,7 @@ class GameScreenBody extends StatelessWidget {
                     style: TextStyle(
                       fontSize: ScreenSize.width * 0.042,
                       color: gameProvider.isCorrectAnswer
-                          ? Colors.green
+                          ? Colors.green.shade600
                           : Colors.red.shade600,
                     ),
                   ),
@@ -100,8 +97,16 @@ class GameScreenBody extends StatelessWidget {
               PokemonOptions(
                 gameProvider: gameProvider,
               ),
+              SizedBox(
+                height: ScreenSize.absoluteHeight * 0.01,
+              ),
               TextButton(
                 style: ButtonStyle(
+                  shape: MaterialStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   backgroundColor: const MaterialStatePropertyAll(
                     Colors.red,
                   ),
@@ -110,18 +115,27 @@ class GameScreenBody extends StatelessWidget {
                   ),
                   padding: MaterialStatePropertyAll(
                     EdgeInsets.symmetric(
-                      horizontal: gameProvider.roundCounter == 10
-                          ? ScreenSize.width * 0.23
-                          : ScreenSize.width * 0.26,
+                      vertical: ScreenSize.width * 0.023,
+                      horizontal: gameProvider.roundCounter == 10 &&
+                              gameProvider.isShowingPokemon
+                          ? ScreenSize.width * 0.20
+                          : ScreenSize.width * 0.23,
                     ),
                   ),
                 ),
                 onPressed: () {
+                  if (gameProvider.roundCounter == 10 &&
+                      !gameProvider.isNewGame) return;
                   gameProvider.loadNextRound();
                 },
                 child: Text(
-                  gameProvider.roundCounter == 10 ? 'Nuevo Juego' : 'Continuar',
-                  style: TextStyle(fontSize: ScreenSize.width * 0.04),
+                  gameProvider.roundCounter == 10 &&
+                          gameProvider.isShowingPokemon
+                      ? 'NUEVO JUEGO'
+                      : 'CONTINUAR',
+                  style: TextStyle(
+                    fontSize: ScreenSize.width * 0.04,
+                  ),
                 ),
               )
             ],

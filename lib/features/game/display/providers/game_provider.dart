@@ -14,6 +14,7 @@ class GameProvider with ChangeNotifier {
   bool isShowingPokemon = false;
   bool isLoading = false;
   bool isCorrectAnswer = false;
+  bool isNewGame = false;
   int successAttemptsCounter = 0;
   int roundCounter = 1;
   int imageId = 1;
@@ -47,8 +48,9 @@ class GameProvider with ChangeNotifier {
     }
     pokemons = [...response];
     hidenPokemon = pokemons[selectedIndex];
-    debugPrint('${hidenPokemon!.id}');
-    debugPrint(hidenPokemon!.name);
+    //Respuestas
+    // debugPrint('${hidenPokemon!.id}');
+    // debugPrint(hidenPokemon!.name);
   }
 
   void checkAnswer(BuildContext context, PokemonModel pokemon) async {
@@ -64,7 +66,7 @@ class GameProvider with ChangeNotifier {
     isShowingPokemon = true;
 
     //Cuando se este seleccionando la 10 respuesta esta funcion muestra el dialogo de fin
-    if (roundCounter == 3) {
+    if (roundCounter == 10) {
       finishGame(context);
     }
     notifyListeners();
@@ -74,6 +76,7 @@ class GameProvider with ChangeNotifier {
     if (isLoading) return;
     isLoading = true;
     isShowingPokemon = false;
+    isNewGame = false;
 
     if (roundCounter < 10) {
       roundCounter++;
@@ -124,7 +127,11 @@ class GameProvider with ChangeNotifier {
         content: Text(endMessage),
         actions: [
           TextButton(
-            onPressed: () => context.pop(),
+            onPressed: () => {
+              context.pop(),
+              isNewGame = true,
+              notifyListeners(),
+            },
             child: const Text(
               'Ok',
               style: TextStyle(

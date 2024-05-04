@@ -32,7 +32,6 @@ class SignInProvider with ChangeNotifier {
   bool validateEmail() {
     if (emailController.text.trim().isEmpty ||
         !AppFunctions.emailRegExp.hasMatch(emailController.text.trim())) {
-      print("object");
       //NOTIFICAR
       return false;
     }
@@ -62,10 +61,13 @@ class SignInProvider with ChangeNotifier {
             context: context, message: result.message);
         return;
       }
-      //Navegar a la siguiente ruta
+      emailController.clear();
+      passwordController.clear();
       context.read<GameProvider>().initGame();
       InAppNotification.successfulSignUp(context: context);
+      //Navegar a la siguiente ruta
       appRouter.go("/game");
+      isLoading = false;
     });
   }
 
@@ -74,30 +76,38 @@ class SignInProvider with ChangeNotifier {
       InAppNotification.invalidEmailAndPassword(context: context);
       return;
     }
-    final result = await signUp(
-        emailController.text.trim(), passwordController.text.trim());
-    if (!result.success) {
-      //notificar
-      InAppNotification.serverFailure(
-          context: context, message: result.message);
-      return;
-    }
-    //Navegar a la siguiente ruta
-    context.read<GameProvider>().initGame();
-    appRouter.go("/game");
+    await signUp(emailController.text.trim(), passwordController.text.trim())
+        .then((result) {
+      if (!result.success) {
+        //notificar
+        InAppNotification.serverFailure(
+            context: context, message: result.message);
+        return;
+      }
+      emailController.clear();
+      passwordController.clear();
+      //Navegar a la siguiente ruta
+      context.read<GameProvider>().initGame();
+      appRouter.go("/game");
+    });
   }
 
-  void checkAuthenticated(BuildContext context) {
+  Future<void> checkAuthenticated(BuildContext context) async {
+    await Future.delayed(
+      const Duration(seconds: 2),
+    );
     if (FirebaseAuth.instance.currentUser != null) {
       Future.microtask(() {
         context.read<GameProvider>().initGame();
         appRouter.go("/game");
       });
+    } else {
+      appRouter.go("/signIn");
     }
   }
 
-  void logout(BuildContext context) {
+  void logOut() {
     FirebaseAuth.instance.signOut();
-    appRouter.go("/");
+    appRouter.go("/signIn");
   }
 }
