@@ -77,7 +77,7 @@ class GameScreenBody extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenSize.absoluteHeight * 0.04,
+                    vertical: ScreenSize.absoluteHeight * 0.035,
                   ),
                   child: Text(
                     gameProvider.isShowingPokemon
@@ -98,7 +98,7 @@ class GameScreenBody extends StatelessWidget {
                 gameProvider: gameProvider,
               ),
               SizedBox(
-                height: ScreenSize.absoluteHeight * 0.01,
+                height: ScreenSize.absoluteHeight * 0.035,
               ),
               TextButton(
                 style: ButtonStyle(
@@ -115,7 +115,7 @@ class GameScreenBody extends StatelessWidget {
                   ),
                   padding: MaterialStatePropertyAll(
                     EdgeInsets.symmetric(
-                      vertical: ScreenSize.width * 0.023,
+                      vertical: ScreenSize.width * 0.035,
                       horizontal: gameProvider.roundCounter == 10 &&
                               gameProvider.isShowingPokemon
                           ? ScreenSize.width * 0.20

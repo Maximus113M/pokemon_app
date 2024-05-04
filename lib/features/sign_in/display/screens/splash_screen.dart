@@ -26,6 +26,7 @@ class SplashScreen extends StatelessWidget {
               ),
               Image.asset(
                 AppAssets.pokemonLogo,
+                height: 90,
               ),
             ],
           ),

@@ -77,6 +77,7 @@ class GameProvider with ChangeNotifier {
     isLoading = true;
     isShowingPokemon = false;
     isNewGame = false;
+    selectedPokemon = null;
 
     if (roundCounter < 10) {
       roundCounter++;

@@ -30,8 +30,8 @@ class SignInScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                AppAssets.pokeBall,
-                height: 120,
+                AppAssets.bigPokeBall,
+                height: 150,
               ),
               const Text(
                 'Inicio',
@@ -95,18 +95,22 @@ class SignInScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(15),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "¿No existe aún esa cuenta? Registrala",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenSize.width * 0.034,
+                      ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.arrow_downward,
                       color: Colors.white,
                     )
@@ -122,10 +126,12 @@ class SignInScreen extends StatelessWidget {
                         .validateSignUp(context);
                   },
                   style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: const Color.fromARGB(255, 143, 21, 21)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 143, 21, 21),
+                  ),
                   child: const Text(
                     'Registrar',
                     style: TextStyle(
