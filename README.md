@@ -112,7 +112,7 @@ Pero en este ejemplo solo usaremos la autenticación de usuarios.
 
 ## 3. Empezar a progrmar la aplicación
 
-Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto {INSERTAR COCEPTOS DE ARQUITECTURA LIMPIA, INYECCIÓN DE DEPENDENCIAS, ENTRE OTROS...}
+Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto {INSERTAR COCEPTOS DE ARQUITECTURA LIMPIA, INYECCIÓN DE DEPENDENCIAS, PROVIDER, WIDGETS, ENTRE OTROS...}
 
 
 ### **1. Modulo de autenticación**
