@@ -110,9 +110,9 @@ Pero en este ejemplo solo usaremos la autenticación de usuarios.
      ```
    - Listo. Ya puedes usar los servicios de Firebase dentro de tu app en Flutter!
 
-## 3. Empezar a progrmar la aplicación
+## 3. Empezar a programar la aplicación
 
-Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto {INSERTAR COCEPTOS DE ARQUITECTURA LIMPIA, INYECCIÓN DE DEPENDENCIAS, PROVIDER, WIDGETS, ENTRE OTROS...}
+Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto {INSERTAR COCEPTOS DE ARQUITECTURA LIMPIA, INYECCIÓN DE DEPENDENCIAS, PROVIDER, WIDGETS, GO ROUTER, FUTURE, DATARESULT WRAPPER ENTRE OTROS...}
 
 
 ### **1. Modulo de autenticación**
@@ -313,7 +313,7 @@ No es necesario de que te los aprendas de memoria, con la practica ya irás desa
 2. **Se envían los datos al provider**
 - A tráves de **ElevatedButton** que permite al usuario interactuar con la aplicación, como iniciar sesión o registrarse. Cuando el usuario presiona uno de estos botones, se activa el evento onPressed, que normalmente ejecuta una función, en este caso, las funciones validateLogIn y validateSignUp del proveedor SignInProvider. Estas funciones manejan la lógica para validar los datos ingresados por el usuario y realizar acciones como iniciar sesión o registrar una nueva cuenta.
 3. **Validación y envío**
-- Las funciones **validateEmail** y **validatePassword** en el **SignInProvider** se utilizan para validar el formato del correo electrónico y la longitud de la contraseña antes de intentar iniciar sesión o registrar una nueva cuenta. Si alguna de estas validaciones falla, se muestra una notificación al usuario.
+- Las funciones **validateEmail** y **validatePassword** en el **SignInProvider** se utilizan para validar el formato del correo electrónico y la longitud de la contraseña antes de intentar iniciar sesión o registrar una nueva cuenta. Si alguna de estas validaciones falla, se muestra una notificación al usuario. En caso de ser correcto, sigue el flujo de la app.
 
 **SigInProvider:**
 ```dart
@@ -431,4 +431,141 @@ class SignInProvider with ChangeNotifier {
   }
 }
 ```
+4. **Flujo de la aplicación**
+- Antes de entrar en detalle al flujo de datos tanto en la Entrada y Salida que maneja la aplicación, se necesita que no te saltes el apartado de **Arquitectura limpia** e **Inyección de dependencias**
+- Luego del provider, los datos pasa por un flujo en base a la **arquitectura limpia** que estamos implementando. Empieza por el **caso de uso** que representan las diferentes funcionalidades de la aplicación.
+
+```dart
+class LogInUseCase {
+  //Code
+  final SignInRepository signInRepository;
+
+  LogInUseCase({required this.signInRepository});
+
+  Future<DataResult<UserCredential>> call(String email, String password) {
+    return signInRepository.signIn(email, password);
+  }
+}
+```
+
+```dart
+class SignUpUseCase {
+  //Code
+  final SignInRepository signInRepository;
+
+  SignUpUseCase({required this.signInRepository});
+
+  Future<DataResult<UserCredential>> call(String email, String password) {
+    return signInRepository.signUp(email, password);
+  }
+}
+```
+- Como ves en los casos de uso se inyecta una clase abstracta **SignInRepository**, que es la que nos define los métodos que la capa de lógica de negocio puede utilizar para acceder y manipular datos. Este sigue un patrón de diseño conocido como [**Repository**](https://codewithandrea.com/articles/flutter-repository-pattern/****), que cuenta con dos partes:
+
+**Interfaz del repository**
+La que define los metodos a seguir.
+
+```dart
+abstract class SignInRepository {
+  Future<DataResult<UserCredential>> signIn(String email, String password);
+  Future<DataResult<UserCredential>> signUp(String email, String password);
+}
+```
+**Implementación del repository**
+Proporciona la implementación concreta de los métodos definidos en la interfaz de repositorio. 
+
+```dart
+class SignInRepositoryImpl extends SignInRepository {
+
+  final SignInDatasource datasource;
+
+  SignInRepositoryImpl({required this.datasource});
+
+  @override
+  Future<DataResult<UserCredential>> signIn(String email, String password) {
+    return datasource.signIn(email, password);
+  }
   
+  @override
+  Future<DataResult<UserCredential>> signUp(String email, String password) {
+    return datasource.signUp(email, password);
+  }
+}
+```
+- Como puedes ver la implementación del repository, también inyecta una última clase, que es el **Service**, el encargado de hacer la conexión y transferencia de datos con apps externas, como un backend, bases de datos, apis terceras y otros servicios en la nube como **Firebase** o **Supabase**.
+
+**Service**
+```dart
+abstract class SignInDatasource {
+  //abstract Functions
+  Future<DataResult<UserCredential>> signIn(String email, String password);
+  Future<DataResult<UserCredential>> signUp(String email, String password);
+}
+
+class SignInDatasourceImpl extends SignInDatasource {
+  @override
+  Future<DataResult<UserCredential>> signIn(
+      String email, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      return DataResult(
+          success: true,
+          message: "Ingresaste a la cuenta correctamente",
+          data: credential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        return DataResult(
+            success: false,
+            message: "No user found for that email",
+            data: null);
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+        return DataResult(
+            success: false,
+            message: "Wrong password provided for that user.",
+            data: null);
+      }
+      print(e);
+      return DataResult(success: false, message: e.message!, data: null);
+    }
+  }
+
+  @override
+  Future<DataResult<UserCredential>> signUp(
+      String email, String password) async {
+    try {
+
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return DataResult(
+          success: true,
+          message: "Cuenta creada correctamente. Ingresaste a la cuenta correctamente",
+          data: credential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+        return DataResult(
+            success: false,
+            message: "The password provided is too weak.",
+            data: null);
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+        return DataResult(
+            success: false,
+            message: "The account already exists for that email.",
+            data: null);
+      }
+      return DataResult(success: false, message: e.message!, data: null);
+    }
+  }
+}
+
+```
+
+- Si ya seguiste este flujo, podrás ver que los metódos usados en las pantallas, terminan aca, sin antes obviamente devolver el tipo de dato esperado en la UI, para su posterior manipulación. 
