@@ -112,7 +112,49 @@ Pero en este ejemplo solo usaremos la autenticación de usuarios.
 
 ## 3. Empezar a programar la aplicación
 
-Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto {INSERTAR COCEPTOS DE ARQUITECTURA LIMPIA, INYECCIÓN DE DEPENDENCIAS, PROVIDER, WIDGETS, GO ROUTER, FUTURE, DATARESULT WRAPPER ENTRE OTROS...}
+Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto: { GO ROUTER, FUTURE, DATARESULT WRAPPER ENTRE OTROS...}
+-ARQUITECTURA LIMPIA: Fundamentos y Aplicaciones
+La arquitectura limpia, es un enfoque metodológico que se basa en una serie de principios y prácticas destinadas a minimizar la complejidad, maximizar la modularidad y facilitar la comprensión del código.
+
+Uno de los principios fundamentales de la arquitectura limpia es la separación de responsabilidades. Esto implica dividir el sistema en componentes independientes, cada uno responsable de una tarea específica. Al mantener las responsabilidades claramente definidas, se facilita la modificación y el mantenimiento del sistema sin afectar otras partes.
+      
+Otro aspecto importante es la jerarquía de abstracciones. Este principio sugiere organizar el sistema en capas (Domain, Data, Display/UI), donde cada capa ofrece un nivel de abstracción superior al anterior. Esto permite construir sistemas flexibles, donde los detalles de implementación están encapsulados en capas inferiores y las decisiones de alto nivel se toman en capas superiores. Esto hace que el código sea más adaptable a los cambios tecnológicos y más fácil de probar siendo ideal para el testing.
+      
+En resumen, la arquitectura limpia es un enfoque metodológico que busca crear sistemas de software robustos, mantenibles y escalables mediante la aplicación de principios como la separación de responsabilidades, la jerarquía de abstracciones, la independencia de frameworks y herramientas, y la testabilidad. Se busca construir sistemas que sean más fáciles de entender, modificar y mantener a lo largo del tiempo (mas información [aquí](https://nescalro.medium.com/entendiendo-a-la-arquitectura-limpia-7877ad3a0a47)).
+
+-INYECCIÓN DE DEPENDENCIAS: Facilitando la Modularidad...
+La inyección de dependencias (DI, por sus siglas en inglés) es un patrón de diseño fundamental en la implementación de la arquitectura limpia. Este enfoque promueve la separación de las dependencias de un componente, permitiendo una mayor modularidad y testabilidad en el código.
+
+Se utiliza para desacoplar los componentes del sistema, facilitando su intercambio y reutilización. En lugar de que un componente instancie directamente sus dependencias, estas se proporcionan desde el exterior, lo que permite cambiar las implementaciones de las dependencias sin modificar el componente principal.
+
+Promueve la inversión del control (IoC), otro principio importante en la arquitectura limpia. En lugar de que un componente controle la creación y gestión de sus dependencias, estas se pasan como parámetros o se proporcionan a través de constructores, métodos de configuración o contenedores de inyección de dependencias (más información [aquí](https://www.campusmvp.es/recursos/post/que-es-la-inyeccion-de-dependencias-y-como-funciona.aspx)).
+
+-PROVIDER: Gestor de Estado
+Los gestores de estado en Flutter son herramientas que permiten manejar de manera eficiente y efectiva la información y la lógica de la aplicación, asegurando un rendimiento óptimo y una experiencia de usuario fluida.
+
+Uno de los gestores de estado más utilizados en Flutter es Provider. Este gestor de estado es simple pero poderoso, permitiendo la propagación eficiente de datos a través de la jerarquía de widgets sin necesidad de reconstruir la interfaz de usuario completa. Utilizando el patrón de InheritedWidget de Flutter, Provider ofrece un enfoque sencillo para compartir datos entre widgets y gestionar su estado de manera efectiva.
+
+Podemos destacar:
+   a. Gestión del Estado: Permite gestionar eficientemente el estado de la aplicación, incluyendo la información y la lógica de la misma. Esto asegura que la aplicación mantenga un estado coherente y             actualizado en todo momento.
+   b. Comunicación entre Widgets: Facilitan la comunicación entre diferentes widgets de la aplicación, permitiendo pasar datos de manera eficiente a través de la jerarquía de widgets sin necesidad de             reconstruir la interfaz de usuario completa.
+   c. Modularidad y Mantenibilidad: Promueven la modularidad y la mantenibilidad del código al separar la lógica de negocio de la interfaz de usuario. Esto hace que el código sea más fácil de entender,          mantener y modificar a medida que evoluciona la aplicación.
+   d. Rendimiento Optimizado: Ayudan a optimizar el rendimiento de la aplicación al reducir la necesidad de reconstruir widgets innecesariamente. Esto se logra mediante la actualización selectiva de widgets     solo cuando sea necesario, en lugar de reconstruir toda la interfaz de usuario.
+   e. Previsibilidad y Depuración: Ofrecen un enfoque predecible y consistente para gestionar el estado de la aplicación, lo que facilita la depuración y el mantenimiento del código. Esto es especialmente       útil en aplicaciones grandes y complejas donde el control del estado es crucial.
+   f. Separación de Responsabilidades: Ayudan a separar las responsabilidades dentro de la aplicación, permitiendo que cada componente se enfoque en una tarea específica. Esto mejora la claridad y la            organización del código, facilitando su comprensión y mantenimiento a largo plazo.
+   (más información [aquí](https://docs.flutter.dev/ui/widgets)).
+
+-Widgets en Flutter: Bloques de Construcción de Interfaces de Usuario Interactivas
+
+En el desarrollo de aplicaciones móviles con Flutter, los widgets son los bloques de construcción fundamentales que componen la interfaz de usuario y definen su apariencia y comportamiento. Desde botones y campos de texto hasta diseños completos, cada elemento visual en una aplicación Flutter es un widget.
+
+Podemos destacar:
+   a. Elementos Visuales y de Interfaz de Usuario: Los widgets en Flutter representan tanto elementos visuales como funcionales de la interfaz de usuario. Pueden ser simples, como un texto estático              (Text('Hola')) o un icono (Icon(Icons.add)), o complejos, como un formulario de entrada de datos(TextFormField(...)) o una lista desplazable(ListView(...)).
+   b. Composición Jerárquica: Los widgets se organizan en una estructura jerárquica, donde los widgets más simples se combinan para formar widgets más complejos. Esta composición jerárquica permite construir    interfaces de usuario complejas y dinámicas a partir de elementos más simples y reutilizables.
+   c. Inmutabilidad y Estado: En Flutter, los widgets son inmutables, lo que significa que una vez creados, no pueden cambiar. Sin embargo, los widgets pueden tener estado interno, que puede cambiar durante     el ciclo de vida de la aplicación. Esto permite crear interfaces de usuario interactivas y dinámicas que responden a la entrada del usuario y a eventos externos.
+   d. Widgets Nativos y Personalizados: Flutter proporciona una amplia variedad de widgets predefinidos que cubren una amplia gama de casos de uso comunes. Además, los desarrolladores también pueden crear       sus propios widgets personalizados para adaptarse a las necesidades específicas de su aplicación.
+   (más información [aquí](https://docs.flutter.dev/ui/widgets)).
+
+
 
 
 ### **1. Modulo de autenticación**
