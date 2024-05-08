@@ -112,7 +112,7 @@ Pero en este ejemplo solo usaremos la autenticación de usuarios.
 
 ## 3. Empezar a programar la aplicación
 
-Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto: { GO ROUTER, FUTURE, DATARESULT WRAPPER ENTRE OTROS...}
+Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este proyecto: { GO ROUTER, FUTURE, ENTRE OTROS...}
 1. **ARQUITECTURA LIMPIA: Fundamentos y Aplicaciones**
 
    La arquitectura limpia, es un enfoque metodológico que se basa en una serie de principios y prácticas destinadas a minimizar la complejidad, maximizar la modularidad y facilitar la comprensión del código.
@@ -155,24 +155,24 @@ Antes de empezar a codear, te quiero dar algunos conceptos que aplicamos en este
    - Inmutabilidad y Estado: En Flutter, los widgets son inmutables, lo que significa que una vez creados, no pueden cambiar. Sin embargo, los widgets pueden tener estado interno, que puede cambiar durante     el ciclo de vida de la aplicación. Esto permite crear interfaces de usuario interactivas y dinámicas que responden a la entrada del usuario y a eventos externos.
    - Widgets Nativos y Personalizados: Flutter proporciona una amplia variedad de widgets predefinidos que cubren una amplia gama de casos de uso comunes. Además, los desarrolladores también pueden crear       sus propios widgets personalizados para adaptarse a las necesidades específicas de su aplicación. ( más información [aquí](https://docs.flutter.dev/ui/widgets) ).
 
-5. **Wrapper: Técnica para para encapsular datos para trabjarlos de una manera mas conveniente**
+5. **Wrapper: Técnica para para encapsular datos para trabajarlos de una manera mas conveniente**
 
-En el proyecto de Flutter, usamos un **wrapper** personalizado llamado **DataResult**, con el fin de encapsular las peticiones que venian desde fuentes externas como Firebase o la API de pókemon. ¿Y esto para qué?. Bueno, principalmente para manejar cualquier tipo de información que venga de estas fuentes externas, ya sea sobre el éxito de la operación, cualquier mensaje relacionado y los datos devueltos por la petición. Es una forma de estructurar y manejar los resultados de manera uniforme en una aplicación.
-
-```dart
-class DataResult<T> {
-  final bool success;
-  final String message;
-  final T ? data;
-
-  DataResult({
-    required this.success,
-    required this.message,
-    required this.data,
-  });
-}
-```
-Como puedes ver, nos devuelve un Booleano relacionado a la operación si fue exitosa, un mensaje para los detalles de la operación, y un **data** de tipo **[Generico (T)](https://caneallestacursos.com/home/genericos-en-dart/)**, que en caso de ser exitosa la operación nos devuelve el dato que necesitamos.
+   En el proyecto de Flutter, usamos un **wrapper** personalizado llamado **DataResult**, con el fin de encapsular las peticiones que venian desde fuentes externas como Firebase o la API de pókemon. ¿Y esto para qué?. Bueno, principalmente para manejar cualquier tipo de información que venga de estas fuentes externas, ya sea sobre el éxito de la operación, cualquier mensaje relacionado y los datos devueltos por la petición. Es una forma de estructurar y manejar los resultados de manera uniforme en una aplicación.
+   
+   ```dart
+   class DataResult<T> {
+     final bool success;
+     final String message;
+     final T ? data;
+   
+     DataResult({
+       required this.success,
+       required this.message,
+       required this.data,
+     });
+   }
+   ```
+   Como puedes ver, nos devuelve un Booleano relacionado a la operación si fue exitosa, un mensaje para los detalles de la operación, y un **data** de tipo **[Generico (T)](https://caneallestacursos.com/home/genericos-en-dart/)**, que en caso de ser exitosa la operación nos devuelve el dato que necesitamos.
 
 ### **1. Modulo de autenticación**
 
