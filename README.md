@@ -955,8 +955,7 @@ SizedBox pokemonImage(GameProvider gameProvider) {
   );
 }
 ```
- - Esta función retorna un Stack que permite superponer las imágenes.
-
+   - Esta función retorna un Stack que permite superponer las imágenes.
 
 ```dart
 class PokemonOptions extends StatelessWidget {
@@ -1033,3 +1032,262 @@ class PokemonOptions extends StatelessWidget {
   }
 }
 ```
+   - Esta clase retorna un Container que contiene una Column que organiza los widgets de las opciones(responseOption()).
+   - La función responseOption() retorna un Contenedor decorado que contiene en una Row ordenados de manera horizontal un icono y el nombre del Pokémon.
+    
+Toda la lógica y el controlador de las funciones de nuevo se encuentran en el Provider, el GameProvider específicamente, la mayoría se llaman en los botones y captura de gestos a través de la pantalla de juego, se puede destacar las siguientes funciones:
+
+   - initGame(), hace la primera configuración del juego después de hacer el logIn.
+   - getPokemons(), gestiona la obtención de números aleatorios (1 - 649) para utilizarse como ids para realizar la consulta de los Pokémons.
+   - checkAnswer(), evalua y gestiona que hacer si la respuesta es correcta o no, si se cumplen las condiciones, finaliza el juego.
+   - loadNextRound(), carga la siguiente ronda de juego.
+   - finishGame(), evalua el texto del dialogo a mostrar segun el puntaje y muestra el dialogo final.
+     
+
+```dart
+class GameProvider with ChangeNotifier {
+  final GetPokemonsUseCase getPokemonsUseCase;
+  List<PokemonModel> pokemons = [];
+  bool isShowingPokemon = false;
+  bool isLoading = false;
+  bool isCorrectAnswer = false;
+  bool isNewGame = false;
+  int successAttemptsCounter = 0;
+  int roundCounter = 1;
+  int imageId = 1;
+  String endMessage = '';
+  //modelo creado para mapear la informacion obtenida desde la respuesta de la Api
+  PokemonModel? hidenPokemon;
+  PokemonModel? selectedPokemon;
+
+  GameProvider({required this.getPokemonsUseCase});
+
+  //hace la primera configuracion del juego despues de hacer el logIn
+  Future<void> initGame() async {
+    if (isLoading) return;
+    isLoading = true;
+    successAttemptsCounter = 0;
+    roundCounter = 1;
+    await getPokemons();
+    isLoading = false;
+    notifyListeners();
+  }
+
+  //ejecuta el caso de uso que hace el llamado de la PokeApi
+  Future<void> getPokemons() async {
+    final List<int> pokemonsIds = [
+      ...AppFunctions.getRandomNumbers()
+    ]; //Clase que contiene funciones, como la de obtener numero random
+    final int selectedIndex = AppFunctions.getRandomIndex();
+    imageId = pokemonsIds[selectedIndex];
+    pokemons.clear();
+    isShowingPokemon = false;
+    notifyListeners();
+
+    final response = await getPokemonsUseCase.call(pokemonsIds);
+
+    if (response == null) {
+      return;
+    }
+    pokemons = [...response];
+    hidenPokemon = pokemons[selectedIndex];
+    //Respuestas
+    // debugPrint('${hidenPokemon!.id}');
+    // debugPrint(hidenPokemon!.name);
+  }
+
+  //evalua y gestiona si la respuesta es correcta o no
+  void checkAnswer(BuildContext context, PokemonModel pokemon) async {
+    if (isShowingPokemon) return;
+    selectedPokemon = pokemon;
+
+    if (hidenPokemon!.id != selectedPokemon!.id) {
+      isCorrectAnswer = false;
+    } else {
+      isCorrectAnswer = true;
+      successAttemptsCounter++;
+    }
+    isShowingPokemon = true;
+
+    //Cuando se este seleccionando la 10 respuesta esta funcion muestra el dialogo de fin
+    if (roundCounter == 10) {
+      finishGame(context);
+    }
+    notifyListeners();
+  }
+
+  //carga la siguiente ronda en el juego
+  void loadNextRound() async {
+    if (isLoading) return;
+    isLoading = true;
+    isShowingPokemon = false;
+    isNewGame = false;
+    selectedPokemon = null;
+
+    if (roundCounter < 10) {
+      roundCounter++;
+    } else {
+      roundCounter = 1;
+      successAttemptsCounter = 0;
+    }
+    await getPokemons();
+    isLoading = false;
+    notifyListeners();
+  }
+
+  //evalua el dialogo a mostrar segun el puntaje y muestra el dialogo final
+  void finishGame(BuildContext context) {
+    endMessage = 'Tu puntaje ha sido $successAttemptsCounter de 10... ';
+    switch (successAttemptsCounter) {
+      case <= 3:
+        endMessage += 'Sigue Intentando ☺.';
+        break;
+      case <= 7:
+        endMessage += 'Muy bien, vas en camino a ser un Maestro Pokémon.';
+        break;
+      case >= 8:
+        endMessage += 'Eres un Maestro Pokémon.';
+        break;
+      default:
+    }
+    //funcion que muestra el dialogo
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        //widget de flutter
+        surfaceTintColor: Colors.white,
+        title: Row(
+          children: [
+            const Text(
+              'Juego Terminado',
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+            SizedBox(
+              width: ScreenSize.width * 0.05,
+            ),
+            Image.asset(
+              AppAssets.pokeBall,
+              height: 40,
+            ),
+          ],
+        ),
+        content: Text(endMessage),
+        actions: [
+          TextButton(
+            onPressed: () => {
+              context.pop(),
+              isNewGame = true,
+              notifyListeners(),
+            },
+            child: const Text(
+              'Ok',
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+```
+   1. **Flujo de la aplicación:**
+   Luego del Provider, con los datos recolectados a traves de las intefaces en los llamados de las funciones, se pasa de nuevo por el flujo en base a la arquitectura limpia. Empieza por el caso de uso que representa la consulta la API.
+
+```dart
+class GetPokemonsUseCase {
+  //inyeccion de la clase GameRepository
+  final GameRepository gameRepository;
+
+  GetPokemonsUseCase({required this.gameRepository});
+
+  //devulve una Lista del modelo Pokemon que puede ser nula, y recibe una lista de numeros(ids)
+  Future<List<PokemonModel>?> call(List<int> pokemonsIds) async {
+    return await gameRepository.getPokemons(pokemonsIds);
+  }
+}
+```
+   - Como ves en el caso de uso se inyecta una clase abstracta GameRepository, que es la que nos define los métodos que la capa de lógica de negocio puede utilizar para acceder y manipular datos. Este sigue un patrón de diseño conocido como Repository, que cuenta con dos partes:
+     
+**Interfaz del repository** La que define los metodos a seguir.
+```dart
+abstract class GameRepository {
+  Future<List<PokemonModel>?> getPokemons(List<int> pokemonsIds);
+}
+```
+**Implementación del repository** Proporciona la implementación concreta de los métodos definidos en la interfaz de repositorio
+```dart
+class GameRepositoryImpl extends GameRepository {
+  //inyeccion del datasource
+  final GameDatasource gameDatasource;
+
+  GameRepositoryImpl({required this.gameDatasource});
+  
+  //sobre escritura obligatoria del metodo definido en la interfaz
+  @override
+  Future<List<PokemonModel>?> getPokemons(List<int> pokemonsIds) async {
+    //control de excepciones
+    try {
+      return await gameDatasource.getPokemons(pokemonsIds);
+    } catch (e) {
+      return null;
+    }
+  }
+}
+```
+   - Como puedes ver la implementación del repository, también inyecta una última clase, que es el Service, el encargado de hacer la conexión y transferencia de datos con la API.
+
+**Service**
+
+```dart
+abstract class GameDatasource {
+  Future<List<PokemonModel>?> getPokemons(List<int> pokemonsIds);
+}
+
+class GameDatasourceImpl extends GameDatasource {
+  @override
+  Future<List<PokemonModel>?> getPokemons(List<int> pokemonsIds) async {
+    try {
+      //lista que se devolvera
+      List<PokemonModel> pokemons = [];
+
+      //itera cada pokemonId y realiza la consulta
+      await Future.forEach(pokemonsIds, (pokemonId) async {
+        final Uri url = Uri.https('pokeapi.co', '/api/v2/pokemon/$pokemonId');
+        final response = await http.get(url);
+        //agrega el pokemon de cada consulta a la lista
+        pokemons.add(
+          PokemonModel.fromJson(jsonDecode(response.body)),
+        );
+      });
+      return pokemons;
+    } catch (e) {
+      debugPrint('getPokemons Error ==> $e');
+      //retorna null si hay algun fallo
+      return null;
+    }
+  }
+}
+```
+**Modelo que mapea la respuesta**
+```dart
+class PokemonModel {
+  final int id;
+  final String name;
+
+  PokemonModel({
+    required this.id,
+    required this.name,
+  });
+  
+  //crea el modelo apartir del json
+  factory PokemonModel.fromJson(json) => PokemonModel(
+        id: json['id'],
+        name: json['name'],
+      );
+}
+```
+     
