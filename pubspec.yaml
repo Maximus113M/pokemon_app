@@ -7,16 +7,31 @@ environment:
   sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
-  another_flushbar: ^1.12.30
-  firebase_auth: ^4.19.4
-  firebase_core: ^2.30.1
   flutter:
     sdk: flutter
+  #ofrece un widget de notificacion pre-establecido aunque adaptable
+  another_flushbar: ^1.12.30
+
+  #paquetes de firebase
+  firebase_auth: ^4.19.4
+  firebase_core: ^2.30.1
+
+  #permite leer archivos svg no soportados nativamente
   flutter_svg_provider: ^1.0.7
+
+  #permite gestionar la injeccion de dependencias  
   get_it: ^7.7.0
+
+  #paquete de navegacion  
   go_router: ^14.0.2
+
+  #permite gestionar las peteciones http  
   http: ^1.2.1
+
+  #gestiona el renderizado de archivos lottie.json  
   lottie: ^3.1.0
+  
+  #gestor de estado  
   provider: ^6.1.2
 
 dev_dependencies:

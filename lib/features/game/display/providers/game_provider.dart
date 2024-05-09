@@ -19,10 +19,13 @@ class GameProvider with ChangeNotifier {
   int roundCounter = 1;
   int imageId = 1;
   String endMessage = '';
+  //modelo creado para mapear la informacion obtenida desde la respuesta de la Api
   PokemonModel? hidenPokemon;
   PokemonModel? selectedPokemon;
+
   GameProvider({required this.getPokemonsUseCase});
 
+  //hace la primera configuracion del juego despues de hacer el logIn
   Future<void> initGame() async {
     if (isLoading) return;
     isLoading = true;
@@ -33,8 +36,11 @@ class GameProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //ejecuta el caso de uso que hace el llamado de la PokeApi
   Future<void> getPokemons() async {
-    final List<int> pokemonsIds = [...AppFunctions.getRandomNumbers()];
+    final List<int> pokemonsIds = [
+      ...AppFunctions.getRandomNumbers()
+    ]; //Clase que contiene funciones, como la de obtener numero random
     final int selectedIndex = AppFunctions.getRandomIndex();
     imageId = pokemonsIds[selectedIndex];
     pokemons.clear();
@@ -53,6 +59,7 @@ class GameProvider with ChangeNotifier {
     // debugPrint(hidenPokemon!.name);
   }
 
+  //evalua y gestiona si la respuesta es correcta o no
   void checkAnswer(BuildContext context, PokemonModel pokemon) async {
     if (isShowingPokemon) return;
     selectedPokemon = pokemon;
@@ -72,6 +79,7 @@ class GameProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //carga la siguiente ronda en el juego
   void loadNextRound() async {
     if (isLoading) return;
     isLoading = true;
@@ -90,6 +98,7 @@ class GameProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //evalua el dialogo a mostrar segun el puntaje y muestra el dialogo final
   void finishGame(BuildContext context) {
     endMessage = 'Tu puntaje ha sido $successAttemptsCounter de 10... ';
     switch (successAttemptsCounter) {
@@ -104,9 +113,11 @@ class GameProvider with ChangeNotifier {
         break;
       default:
     }
+    //funcion que muestra el dialogo
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        //widget de flutter
         surfaceTintColor: Colors.white,
         title: Row(
           children: [

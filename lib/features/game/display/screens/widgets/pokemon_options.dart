@@ -7,6 +7,7 @@ import 'package:pokemon_app/features/game/display/providers/game_provider.dart';
 import 'package:provider/provider.dart';
 
 class PokemonOptions extends StatelessWidget {
+  //parametro requerido
   final GameProvider gameProvider;
   const PokemonOptions({super.key, required this.gameProvider});
 
@@ -15,6 +16,7 @@ class PokemonOptions extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenSize.width * 0.15),
       child: Column(
+        //metodo que genenera una lista(iteracion) pueden ser widgets
         children: List.generate(
           gameProvider.pokemons.length,
           (index) => responseOption(context, gameProvider.pokemons[index]),
@@ -23,9 +25,12 @@ class PokemonOptions extends StatelessWidget {
     );
   }
 
+  //metodo que devuelve el widget que construye cada opcion, pide context y el pokemon por parametro
   Widget responseOption(BuildContext context, PokemonModel pokemon) {
+    //widget que permite que otro widget adquiera algun comportamiento segun los gestos...
     return GestureDetector(
       onTap: () {
+        //llamado al GameProvider par verificar la opcion selecionada
         context.read<GameProvider>().checkAnswer(context, pokemon);
       },
       child: Container(
@@ -41,7 +46,7 @@ class PokemonOptions extends StatelessWidget {
                 : Colors.grey.shade300,
           ),
           borderRadius: const BorderRadius.all(
-            Radius.circular(20),
+            Radius.circular(10),
           ),
           color: gameProvider.isShowingPokemon
               ? gameProvider.hidenPokemon?.id == pokemon.id
@@ -49,6 +54,7 @@ class PokemonOptions extends StatelessWidget {
                   : Colors.red.shade50
               : Colors.white24,
         ),
+        //contruye widgets en horizontal
         child: Row(
           children: [
             Icon(

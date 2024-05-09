@@ -55,6 +55,7 @@ class SignInProvider with ChangeNotifier {
 
     if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
+      isLoggingIn = false;
       return;
     }
     await signIn(emailController.text, passwordController.text).then((result) {
@@ -83,6 +84,7 @@ class SignInProvider with ChangeNotifier {
 
     if (!validateEmail() || !validatePassword()) {
       InAppNotification.invalidEmailAndPassword(context: context);
+      isCheckingIn = false;
       return;
     }
     await signUp(emailController.text.trim(), passwordController.text.trim())

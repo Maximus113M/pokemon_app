@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:pokemon_app/core/util/app_assests.dart';
 import 'package:pokemon_app/core/util/screen_size.dart';
 import 'package:pokemon_app/features/sign_in/display/providers/sign_in_provider.dart';
+
 import 'package:provider/provider.dart';
 
 class SignInScreen extends StatelessWidget {
