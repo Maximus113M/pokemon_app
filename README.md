@@ -41,7 +41,19 @@ Para esta ocasión vamos a instalar Flutter dentro de Windows. Pero puedes segui
    - Puedes ejecutar el comando `flutter upgrade` para actualizar Flutter a la última versión disponible.
    - También puedes ejecutar el comando `flutter pub global activate dart_style` para asegurarte de tener la última versión de Dart Style, que es útil para formatear el código Dart.
 
+7. **Tutorial de Instalación(opcional):**
+   - https://www.youtube.com/watch?v=BTubOBvfEUE&t=355s
+   
 ¡Listo! Has completado la instalación de Flutter en tu sistema Windows. Ahora estás listo para comenzar a desarrollar aplicaciones móviles con Flutter.
+
+**Crea el proyecto:**
+
+1. Antes de crear el proyecto, crearemos una carpeta, y la abriremos vs code.
+2. Una vez en la carpeta, escribiremos el comando ">Flutter: New Project" en la barra de busqueda superior.
+3. Selecciona la opcion Empty App, la cual ofrece un codigo basico minimalista con el main creado para ejecutar la app.
+4. Seleccionar la carpeta creada.
+5. Le damos nombre al proyecto. Una vez creado debe aparecer en la seccion de archivos.
+6. Con el proyecto creado, debemos ingresar a la carpeta del proyecto. 
 
 ## 2. Configuración de Firebase con Flutter
 
